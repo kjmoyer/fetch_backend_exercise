@@ -8,9 +8,9 @@ app.post('/transaction', (req, res) => {
   controller.addTransaction(req, res)
 }) //for new transactions
 
-// app.put('/spend',(req, res) => {
-
-// } ) //spend points
+app.put('/spend', (req, res) => {
+  controller.spendPoints(req, res)
+} ) //spend points
 
 app.get('/balances', (req, res) => {
   controller.getBalances(req, res);
