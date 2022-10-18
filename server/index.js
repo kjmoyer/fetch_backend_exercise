@@ -1,22 +1,20 @@
 const express = require('express');
 const morgan = require('morgan');
-const model = require('model.js');
-
+const controller = require('./controller.js');
 const app = express();
-app.use(morgan);
 app.use(express.json());
 
-app.put('/transaction', (req, res) => {
-  model.addTransaction()
+app.post('/transaction', (req, res) => {
+  controller.addTransaction(req, res)
 }) //for new transactions
 
-app.put('/spend',() => {
+// app.put('/spend',(req, res) => {
 
-} ) //spend points
+// } ) //spend points
 
-app.get('/balance', () => {
+// app.get('/balance', (req, res) => {
 
-}) //get point balances
+// }) //get point balances
 
 const port = 3000;
 app.listen(port, () => {
