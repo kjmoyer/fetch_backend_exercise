@@ -1,47 +1,60 @@
 
 const transactions = [];
-const payerBalances = {};
+let accumulatedPoints = {};
+let removedPoints = {};
 
-async function addTransaction(transaction)  {
-  if (!payerBalances[transaction.payer]) { //if this is a new payer, add to the payers object for tracking
+async function addTransaction(transaction) {
+  if (!accumulatedPoints[transaction.payer]) { //if this is a new payer, add to the payers object for tracking
     addPayer(transaction.payer);
   }
   if (transaction.points < 0) {
-    return deduct(transaction.payer, -transaction.points);
+    return deduct(transaction.payer, -transaction.points, transaction)
   }
-  transaction.pointsAvailable = transaction.points; //this element can be altered without modifying the original transaction amounts
-  transactions.push(transaction); //adds transaction
-  payerBalances[transaction.payer] += transaction.points; //updates payer
+  //insert into the transaction array in order
+  logTransaction(transaction);
+  accumulatedPoints[transaction.payer] += transaction.points; //updates payer
   return 'Success'; //TODO: maybe change this
 }
 
 const addPayer = (payer) => {
-  payerBalances[payer] = 0;
+  accumulatedPoints[payer] = 0;
+  removedPoints[payer] = 0;
 }
 
-const deduct = (payer, points) => { //FIXME: finish this
-  console.log('transactions', transactions)
-  if (points > payerBalances[payer]) {
-    return new RangeError('Not enough points for this transaction');
-  }
-  //find the oldest transaction for that payer
-  for (let i = 0; i < transactions.length; i++) {
-    if (transactions[i].payer === payer && transactions[i].pointsAvailable >= points) { //right payer and enough points
-      console.log('points', points);
-      transactions[i].pointsAvailable -= points;
-      payerBalances[payer] -= points;
-      console.log('balances', payerBalances);
-      return 'Success';
-    } else if (transactions[i].payer === payer) { //right payer, not enough points
-      points -= transactions[i].pointsAvailable;
-      payerBalances[payer] -= transactions[i].pointsAvailable;
-      transactions[i].pointsAvailable = 0;
+const logTransaction = (transaction) => {
+  let timestamp = transaction.timestamp;
+  if (transactions.length === 0) {
+    transactions.push(transaction);
+  } else {
+    for (let i = 0; i <= transactions.length; i++) {
+      if (i === transactions.length) {
+        transactions.push(transaction);
+        break;
+      }
+      console.log('timestamp comparison', transactions[i].timestamp >= timestamp);
+      if (transactions[i].timestamp > timestamp) {
+        transactions.splice(i, 0, transaction)
+        break;
+      }
     }
   }
+}
+
+const deduct = (payer, points, transaction) => {
+  if (points > accumulatedPoints[payer]) {
+    throw new RangeError('Not enough points for this transaction');
+  }
+  removedPoints[payer] += points;
+  logTransaction(transaction);
 };
 
 async function getBalances() {
-  return payerBalances;
+  let balances = {};
+  for (payer in accumulatedPoints) {
+    balances[payer] = accumulatedPoints[payer] - removedPoints[payer];
+    console.log(balances[payer] = accumulatedPoints[payer] - removedPoints[payer]);
+  }
+  return balances;
 }
 
 module.exports = {
