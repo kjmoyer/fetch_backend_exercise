@@ -12,9 +12,9 @@ app.post('/transaction', (req, res) => {
 
 // } ) //spend points
 
-// app.get('/balance', (req, res) => {
-
-// }) //get point balances
+app.get('/balances', (req, res) => {
+  controller.getBalances(req, res);
+}) //get point balances
 
 const port = 3000;
 app.listen(port, () => {
