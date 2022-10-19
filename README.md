@@ -42,7 +42,7 @@ GET ALL POINT BALANCES BY PAYER:
   
 All data is being stored in memory in the model.js file.
 
-```Transactions``` are being stored in an array, and are entered in chronologically at insertion.
+```transactions``` are being stored in an array, and are entered in chronologically at insertion.
 
 All transactions are stored here including any transactions that have a negative point value.
 
@@ -51,7 +51,7 @@ Each element contains the payer, points, and a timestamp.
 Transactions are never altered or removed once entered for reporting integrity.
 
 
-```AccumulatedPoints``` is an object that stores the total number of points ever accumulated separated by payer.
+```accumulatedPoints``` is an object that stores the total number of points ever accumulated separated by payer.
 
 Each key is the name of a single payer, with a value equal to the points ever accumulated for that payer
 
