@@ -25,6 +25,8 @@ async function getBalances() {
     balances[payer] = accumulatedPoints[payer] - removedPoints[payer];
   }
   console.log('transactions', transactions);
+  console.log('removedPoints', removedPoints);
+  console.log('accumulatedPoints', accumulatedPoints);
   return balances;
 }
 
@@ -38,7 +40,7 @@ async function spendPoints(points) {
   }
   //if total points < requested points send an error
   if (totalPoints < points) {
-    throw new Error('Not enough points to fulfill this request');
+    throw new RangeError('Not enough points to fulfill this request');
   }
   //create an array to hold the response objects
   let response = [];
@@ -83,12 +85,13 @@ async function spendPoints(points) {
       //set removed points for that payer to 0;
     } else {
       addPayerPoints(transactions[i].payer, transactions[i].points - removed[transactions[i].payer]) //only passes in points remaining after removed points are accounted for
-      removed[transactions[i].payer].points = 0; //FIXME: doesn't seem to be setting this to 0
+      removed[transactions[i].payer] = 0;
     }
     i++;
   }
   for (payer in consumedPoints) {
     response.push({ "payer": payer, "points": -consumedPoints[payer] })
+    removedPoints[payer] += consumedPoints[payer];
     //TODO: add these amounts to actual removed values
   }
   //for each key in the temp object, push it's values into the return array
