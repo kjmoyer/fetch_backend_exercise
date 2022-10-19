@@ -4,7 +4,8 @@ This service accepts HTTP request for transactions to store, use, and query a us
 
 
 API ROUTES:
-Requests should be made to localhost on port 3000, with the listed JSON arguments in the request ```diff +body ```
+Requests should be made to localhost on port 3000, with the listed JSON arguments in the request ```diff
++body```
 
 ADD NEW TRANSACTION
   type: POST
