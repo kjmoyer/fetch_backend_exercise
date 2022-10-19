@@ -4,8 +4,7 @@ This service accepts HTTP request for transactions to store, use, and query a us
 
 
 API ROUTES:
-Requests should be made to localhost on port 3000, with the listed JSON arguments in the request ```diff
-+body```
+Requests should be made to localhost on port 3000, with the listed JSON arguments in the request ```body```
 
 ADD NEW TRANSACTION
   type: POST
@@ -38,7 +37,10 @@ DATA LOGIC:
 
 All data is being stored in memory in the model.js file.
 
-```diff +transactions``` are being stored in an array, and are entered in chronologically at insertion.
+```diff
++transactions
+  ```
+are being stored in an array, and are entered in chronologically at insertion.
 
 All transactions are stored here including any transactions that have a negative point value.
 
